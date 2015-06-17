@@ -31,13 +31,13 @@ function getUrlParameter(sParam)
 var lat = getUrlParameter("lat");
 var lon = getUrlParameter("lon");  
 
-if (lat == 'undefined') {
+// if (lat == 'undefined') {
   lat = 4.679587;
-}
+// }
 
-if (lon == 'undefined') {
+// if (lon == 'undefined') {
   lon = -74.049479;
-}
+// }
 
 var map = L.map('map').setView([lat, lon], 17);
 		L.tileLayer('https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png', {
