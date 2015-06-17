@@ -31,11 +31,11 @@ function getUrlParameter(sParam)
 var lat = getUrlParameter("lat");
 var lon = getUrlParameter("lon");  
 
-if (lat == 'undefined') {
+if(typeof lat === 'undefined'){
   lat = 4.679587;
-}
+ }
 
-if (lon == 'undefined') {
+if(typeof lon === 'undefined'){
   lon = -74.049479;
 }
 
