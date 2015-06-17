@@ -27,16 +27,22 @@ function getUrlParameter(sParam)
     }
 } 
 
-
 var lat = getUrlParameter("lat");
 var lon = getUrlParameter("lon");  
 
-if(typeof lat === 'undefined'){
-  lat = -34.603761;
- }
+function getXY(xy) {
+  lat = xy.coords.latitude;
+  lon = xy.coords.longitude; 
+}
 
-if(typeof lon === 'undefined'){
-  lon = -58.381562;
+if (typeof lat === 'undefined') || (typeof lon === 'undefined') {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(getXY);
+  }
+  else {
+    lat = -34.603761;
+    lon = -58.381562;
+  }
 }
 
 var map = L.map('map').setView([lat, lon], 17);
