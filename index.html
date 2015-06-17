@@ -35,7 +35,7 @@ function getXY(xy) {
   lon = xy.coords.longitude; 
 }
 
-if (typeof lat === 'undefined') || (typeof lon === 'undefined') {
+if ((typeof lat === 'undefined') || (typeof lon === 'undefined')) {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(getXY);
   }
