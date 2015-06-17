@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>mapa centrado en coordenadas pasadas por parametro</title>
+	<meta charset="utf-8" />
+
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<link rel="stylesheet" href="http://leafletjs.com/dist/leaflet.css" />
+</head>
+<body>
+	<div id="map" style="width: 600px; height: 400px"></div>
+
+	<script src="http://leafletjs.com/dist/leaflet.js"></script>
+<script>
+function getUrlParameter(sParam)
+{
+    var sPageURL = window.location.search.substring(1);
+    var sURLVariables = sPageURL.split('&');
+    for (var i = 0; i < sURLVariables.length; i++) 
+    {
+        var sParameterName = sURLVariables[i].split('=');
+        if (sParameterName[0] == sParam) 
+        {
+            return sParameterName[1];
+        }
+    }
+} 
+
+
+var lat = getUrlParameter("lat");
+var lon = getUrlParameter("lon");  
+
+if (lat == 'undefined') {
+  lat = 4.679587;
+}
+
+if (lon == 'undefined') {
+  lon = -74.049479;
+}
+
+var map = L.map('map').setView([lat, lon], 17);
+		L.tileLayer('https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png', {
+			maxZoom: 18,
+			attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+				'<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+				'Imagery © <a href="http://mapbox.com">Mapbox</a>',
+			id: 'examples.map-i875mjb7'
+		}).addTo(map);
+
+
+L.marker([lat, lon]).addTo(map);
+// L.marker([51.5, -0.09]).addTo(map).bindPopup("<b>Hello world!</b><br />I am a popup.").openPopup();
+
+var popup = L.popup();
+
+function onMapClick(e) {
+  popup
+    .setLatLng(e.latlng)
+	.setContent("coordenadas: " + e.latlng.toString())
+	.openOn(map);
+}
+map.on('click', onMapClick);
+  
+</script>
+</body>
+</html>
