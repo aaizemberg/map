@@ -44,11 +44,14 @@ if ((typeof lat == 'undefined') || (typeof lon == 'undefined')) {
     lon = -58.381562;
   }
 }
+console.log("lat = " + lat);
+console.log("lon = " + lon);
 
 var zoom = getUrlParameter("zoom");
-if ((typeof zoom == 'undefined') {
+if (typeof zoom == 'undefined') {
 	zoom = 17;
 }
+console.log("zoom = " + zoom);
 
 var map = L.map('map').setView([lat, lon], zoom);
 		L.tileLayer('https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png', {
