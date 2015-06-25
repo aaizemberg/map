@@ -35,7 +35,7 @@ function getXY(xy) {
   lon = xy.coords.longitude.toString(); 
 }
 
-if ((typeof lat === 'undefined') || (typeof lon === 'undefined')) {
+if ((typeof lat == 'undefined') || (typeof lon == 'undefined')) {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(getXY);
   }
@@ -45,7 +45,12 @@ if ((typeof lat === 'undefined') || (typeof lon === 'undefined')) {
   }
 }
 
-var map = L.map('map').setView([lat, lon], 17);
+var zoom = getUrlParameter("zoom");
+if ((typeof zoom == 'undefined') {
+	zoom = 17;
+}
+
+var map = L.map('map').setView([lat, lon], zoom);
 		L.tileLayer('https://{s}.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png', {
 			maxZoom: 18,
 			attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
@@ -54,8 +59,7 @@ var map = L.map('map').setView([lat, lon], 17);
 			id: 'examples.map-i875mjb7'
 		}).addTo(map);
 
-
-L.marker([lat, lon]).addTo(map);
+L.marker([lat, lon]).addTo(map).bindPopup("texto");
 // L.marker([51.5, -0.09]).addTo(map).bindPopup("<b>Hello world!</b><br />I am a popup.").openPopup();
 
 // var popup = L.popup();
