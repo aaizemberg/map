@@ -38,7 +38,25 @@
 <script>
 	var maps = [];
 
+	var onZoomEnd = function (e) {
+
+		console.log(e);
+
+		var index = parseInt(e.target._container.id.substr(-1));
+
+		console.log(index);
+
+		var zoom = maps[index-1].getZoom();
+
+		_.each(maps, function (map) {
+			map.setZoom(zoom);
+		});
+
+	};
+
 	var onMapMove = _.debounce(function (e) {
+
+		if (!e.originalEvent) return;
 
 		var index = parseInt(e.originalEvent.target.id.substr(-1));
 
@@ -56,6 +74,7 @@
 	  maps.push(mymap);
 
 	  mymap.on('move', onMapMove);
+	  mymap.on('zoomend', onZoomEnd);
 	});
 </script>
 
