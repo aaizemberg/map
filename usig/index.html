@@ -5,7 +5,7 @@
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">	
 	<link rel="stylesheet" href="//unpkg.com/leaflet@1.0.1/dist/leaflet.css" />
-	<script src="//unpkg.com/leaflet@1.0.1/dist/leaflet.js"></script>
+	
 	<style>
 		body {
 			padding: 0;
@@ -15,16 +15,48 @@
 			height: 100vh;
 			width: 100vw;
 		}
+		.grid-elem {
+			width: 25%;
+			height: 50%;
+			float: left;
+		}
 		</style>
 	</head>
 <body>
 
-<div id="map"></div>
+<div class="grid-elem" id="map1"></div>
+<div class="grid-elem" id="map2"></div>
+<div class="grid-elem" id="map3"></div>
+<div class="grid-elem" id="map4"></div>
+<div class="grid-elem" id="map5"></div>
+<div class="grid-elem" id="map6"></div>
+<div class="grid-elem" id="map7"></div>
+<div class="grid-elem"><img style="height:100%; width: 100%" src="http://mapa.buenosaires.gov.ar//images/icons/c6c113a9.196.png"/></div>
 
+<script src="//unpkg.com/leaflet@1.0.1/dist/leaflet.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.2/lodash.js"></script>
 <script>
-  var mymap = L.map('map').setView([-34.604916,-58.3900979], 11);
-  var url = '//tiles1.usig.buenosaires.gob.ar/mapcache/tms/1.0.0/amba_con_transporte_3857@GoogleMapsCompatible/{z}/{x}/{y}.png';
-  var tms_usig = L.tileLayer(url, { attribution: '<a href="//mapa.buenosaires.gob.ar/">USIG</a> (GCBA)', tms: true }).addTo(mymap);
+	var maps = [];
+
+	var onMapMove = _.debounce(function (e) {
+
+		var index = parseInt(e.originalEvent.target.id.substr(-1));
+
+		var center = maps[index-1].getCenter();
+
+		_.each(maps, function (map) {
+			map.panTo(center);
+		});
+	}, 10);
+
+	_.each(_.range(1, 8), function (i) {
+		var mymap = L.map('map'+i).setView([-34.604916,-58.3900979], 11);
+	  var url = '//tiles'+i+'.usig.buenosaires.gob.ar/mapcache/tms/1.0.0/amba_con_transporte_3857@GoogleMapsCompatible/{z}/{x}/{y}.png';
+	  var tms_usig = L.tileLayer(url, { attribution: '<a href="//mapa.buenosaires.gob.ar/">USIG</a> (GCBA)', tms: true }).addTo(mymap);
+	  maps.push(mymap);
+
+	  mymap.on('move', onMapMove);
+	});
 </script>
 
 </body>
