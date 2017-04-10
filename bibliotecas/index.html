@@ -6,14 +6,15 @@
 
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-	
+
   <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
 
   <link rel="stylesheet" href="//unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
   <script src="//unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
 
   <!-- <script src="//code.jquery.com/jquery-2.1.4.js"></script> -->
-  
+  <script src="https://code.jquery.com/jquery-git.js"></script>
+
 </head>
 <body>
 
@@ -25,7 +26,17 @@
     attribution: 'Esri &copy;',
 	id: 'Esri.WorldStreetMap'
   }).addTo(map);
-</script>  
-  
+
+function addDataToMap(data, map) {
+    var dataLayer = L.geoJson(data);
+    dataLayer.addTo(map);
+}
+
+$.getJSON("big.geojson", function(data) { addDataToMap(data, map); });
+
+// $.getJSON("http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson", function(data) { addDataToMap(data, map); });
+
+</script>
+
 </body>
 </html>
