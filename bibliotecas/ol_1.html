@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>Bibliotecas</title>
+  <style>
+    #map {
+      position: relative;
+    }
+    #popup {
+      padding-bottom: 15px;
+    }
+  </style>  
+</head>
+<body>
+  <script src="https://code.jquery.com/jquery.min.js"></script>
+
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.5.0/ol.css" rel="stylesheet" type="text/css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/ol3/3.5.0/ol.js"></script>
+
+  <div class="row-fluid">
+    <div class="span12">
+        <div id="map" class="map">
+            <div id="popup"></div>
+        </div>
+    </div>
+  </div>
+
+<script> 
+var vectorLayer = new ol.layer.Vector({
+    source: new ol.source.Vector({
+        format: new ol.format.GeoJSON(),
+        url: 'https://raw.githubusercontent.com/aaizemberg/map/gh-pages/bibliotecas/big.geojson'
+    }),
+    style: new ol.style.Style({
+        image: new ol.style.Circle( /** @type {olx.style.IconOptions} */ ({
+            radius: 2,
+            fill: new ol.style.Fill({
+                color: '#444'
+            })
+        }))
+    })
+});
+
+
+var rasterLayer = new ol.layer.Tile({
+    source: new ol.source.TileJSON({
+        url: 'http://api.tiles.mapbox.com/v3/mapbox.geography-class.jsonp',
+        crossOrigin: ''
+    })
+});
+
+var map = new ol.Map({
+    layers: [rasterLayer, vectorLayer],
+    target: document.getElementById('map'),
+    view: new ol.View({
+        center: [-7146181.480674, -3878227.203229],
+        zoom: 2
+    })
+});
+
+var element = document.getElementById('popup');
+
+var popup = new ol.Overlay({
+    element: element,
+    positioning: 'bottom-center',
+    stopEvent: false
+});
+map.addOverlay(popup);
+
+map.on('click', function (evt) {
+    var feature = map.forEachFeatureAtPixel(evt.pixel,
+
+    function (feature, layer) {
+        return feature;
+    });
+    if (feature) {
+        var geometry = feature.getGeometry();
+        var coord = geometry.getCoordinates();
+        popup.setPosition(coord);
+        $(element).popover({
+            'placement': 'top',
+                'html': true,
+                'content': "id: " + feature.get('id') + "<br>" + feature.get('Nombre') + "<br><b>" + feature.get('Red') + "</b>" 
+        });
+        $(element).popover('show');
+    } else {
+        $(element).popover('destroy');
+    }
+});
+
+map.on('pointermove', function (e) {
+    if (e.dragging) {
+        $(element).popover('destroy');
+        return;
+    }
+    var pixel = map.getEventPixel(e.originalEvent);
+    var hit = map.hasFeatureAtPixel(pixel);
+    map.getTarget().style.cursor = hit ? 'pointer' : '';
+});
+</script>  
+  
+</body>
+</html>
